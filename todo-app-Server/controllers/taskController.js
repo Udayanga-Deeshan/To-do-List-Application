@@ -17,19 +17,15 @@ export const getAllTasks = (req, res) => {
     });
   };
 
-  export const createTask = (req,res) =>{
-    const {title,description,dueDate,status} =req.body;
-    db.query('INSERT INTO taks(title,description,due_date,status) VALUES()',[title,description,dueDate,status],
-        (err,results)=>{
-            if(err) return res.status(500).json({error:err.message});
-            res.status(201).json(
-                {
-                    id:insertId,title,description,dueDate,status
-                }
-            )
-        }
-    )
-  }
+  export const createTask = (req, res) => {
+    const { title, description, dueDate, status } = req.body;
+    db.query('INSERT INTO tasks (title, description, due_date, status) VALUES (?, ?, ?, ?)', 
+      [title, description, dueDate, status], 
+      (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.status(201).json({ id: results.insertId, title, description, dueDate, status });
+    });
+  };
 
   export const updateTask = (req, res) => {
     const { id } = req.params;
@@ -39,6 +35,15 @@ export const getAllTasks = (req, res) => {
       (err) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json({ message: 'Task updated successfully' });
+    });
+  };
+
+
+  export const deleteTask = (req, res) => {
+    const { id } = req.params;
+    db.query('DELETE FROM tasks WHERE id = ?', [id], (err) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json({ message: 'Task deleted successfully' });
     });
   };
   

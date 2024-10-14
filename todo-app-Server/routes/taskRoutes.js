@@ -3,7 +3,7 @@ import { getAllTasks } from '../controllers/taskController.js';
 
 const  router =  Router();
 
-router.get('/',getAllTasks);
+router.get('/getAllTasks',getAllTasks);
 
 
 

@@ -1,28 +1,53 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import './TaskList.css'; 
 
 const TaskList = () => {
-  
-  const [tasks, setTasks] = useState([
-    { id: 1, title: 'Finish Project', due_date: '2024-10-20', completed: false },
-    { id: 2, title: 'Prepare Presentation', due_date: '2024-10-25', completed: false },
-    { id: 3, title: 'Buy Groceries', due_date: '2024-10-22', completed: false },
-    { id: 4, title: 'Book Doctor Appointment', due_date: '2024-10-19', completed: false },
-  ]);
+  const [tasks, setTasks] = useState([]);
 
-  
+  useEffect(() => {
+    axios.get('http://localhost:9000/api/tasks/getAllTasks')
+      .then((response) => {
+        console.log(response.data);
+        setTasks(response.data); 
+      })
+      .catch((error) => {
+        console.error('Error fetching tasks:', error);
+      });
+  }, []);
+
   const toggleCompletion = (id) => {
-    const updatedTasks = tasks.map((task) =>
-      task.id === id ? { ...task, completed: !task.completed } : task
-    );
-    setTasks(updatedTasks);
+    axios.patch(`http://localhost:9000/api/tasks/updateTaskCompletion/${id}`)
+      .then(() => {
+        setTasks((prevTasks) =>
+          prevTasks.map((task) =>
+            task.id === id ? { ...task, completed: !task.completed } : task
+          )
+        );
+      })
+      .catch((error) => {
+        console.error('Error updating task:', error);
+      });
   };
 
-  
   const deleteTask = (id) => {
-    alert(`Task with ID ${id} deleted`);
+    axios.delete(`http://localhost:9000/api/tasks/deleteTask/${id}`)
+      .then(() => {
+        setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+      })
+      .catch((error) => {
+        console.error('Error deleting task:', error);
+      });
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); 
+    const day = String(date.getDate()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}`;
   };
 
   return (
@@ -33,17 +58,18 @@ const TaskList = () => {
       </Link>
       <ul className="task-list">
         {tasks.map((task) => (
+          
           <li key={task.id} className={`task-item ${task.completed ? 'completed' : ''}`}>
             <div className="task-details">
               <input
                 type="checkbox"
-                checked={task.completed}
-                onChange={() => toggleCompletion(task.id)}
+                checked={task.completed ?? false}  
+                onChange={() => toggleCompletion(task.id)} 
               />
               <Link to={`/task/${task.id}`} className="task-title">
                 {task.title}
               </Link>
-              <span className="task-due-date"> - Due: {task.due_date}</span>
+              <span className="task-due-date"> - Due: {formatDate(task.due_date)}</span>
             </div>
             <div className="task-actions">
               <Link to={`/edit-task/${task.id}`}>
@@ -61,3 +87,9 @@ const TaskList = () => {
 };
 
 export default TaskList;
+
+
+
+
+
+

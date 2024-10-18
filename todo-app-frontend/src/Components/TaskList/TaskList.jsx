@@ -1,28 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom'; 
 import axios from 'axios';
 import './TaskList.css'; 
 
 const TaskList = () => {
+  const { userId } = useParams(); 
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:9000/api/tasks/getAllTasks')
-      .then((response) => {
-        console.log(response.data);
-        setTasks(response.data); 
-      })
-      .catch((error) => {
-        console.error('Error fetching tasks:', error);
-      });
-  }, []);
+    if (userId) {
+      axios.get(`http://localhost:9000/api/tasks/getAllTasks/${userId}`) 
+        .then((response) => {
+          console.log(response.data);
+          setTasks(response.data); 
+        })
+        .catch((error) => {
+          console.error('Error fetching tasks:', error);
+        });
+    }
+  }, [userId]); 
 
-  const toggleCompletion = (id) => {
-    axios.patch(`http://localhost:9000/api/tasks/updateTaskCompletion/${id}`)
+  const toggleCompletion = (id, currentStatus) => {
+    const newStatus = currentStatus === 'pending' ? 'completed' : 'pending'; 
+
+    axios.patch(`http://localhost:9000/api/tasks/updateTaskCompletion/${id}`, { status: newStatus })
       .then(() => {
         setTasks((prevTasks) =>
           prevTasks.map((task) =>
-            task.id === id ? { ...task, completed: !task.completed } : task
+            task.id === id ? { ...task, status: newStatus } : task
           )
         );
       })
@@ -58,13 +63,12 @@ const TaskList = () => {
       </Link>
       <ul className="task-list">
         {tasks.map((task) => (
-          
-          <li key={task.id} className={`task-item ${task.completed ? 'completed' : ''}`}>
+          <li key={task.id} className={`task-item ${task.status === 'completed' ? 'completed' : ''}`}>
             <div className="task-details">
               <input
                 type="checkbox"
-                checked={task.completed ?? false}  
-                onChange={() => toggleCompletion(task.id)} 
+                checked={task.status === 'completed'} 
+                onChange={() => toggleCompletion(task.id, task.status)} 
               />
               <Link to={`/task/${task.id}`} className="task-title">
                 {task.title}

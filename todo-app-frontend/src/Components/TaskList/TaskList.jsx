@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './TaskList.css'; 
 import axios from 'axios';
 
-const TaskList = ({ token,tasks,setTasks, deleteTask }) => {
+const TaskList = ({ token,tasks,setTasks }) => {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -37,6 +37,23 @@ const TaskList = ({ token,tasks,setTasks, deleteTask }) => {
       })
       .catch((error) => {
         console.error('Error updating task:', error);
+      });
+  };
+
+  const deleteTask = (id) => {
+    axios
+      .delete(`http://localhost:9000/api/tasks/deleteTask/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(() => {
+        
+        setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+        console.log(`Task ${id} deleted successfully`);
+      })
+      .catch((error) => {
+        console.error('Error deleting task:', error);
       });
   };
 

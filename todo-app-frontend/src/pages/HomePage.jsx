@@ -46,7 +46,7 @@ const HomePage = () => {
 
       
       {tasks.length > 0 ? (
-        <TaskList tasks={tasks} /> 
+        <TaskList tasks={tasks} token={token} setTasks={setTasks}/> 
       ) : (
         <p>No tasks available. Click "Add Task" to create one.</p>
       )}

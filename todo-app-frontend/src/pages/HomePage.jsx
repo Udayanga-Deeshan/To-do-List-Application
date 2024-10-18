@@ -7,14 +7,14 @@ import { Link } from 'react-router-dom';
 
 const HomePage = () => {
   const [tasks, setTasks] = useState([]);
-  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('user'))); // Fetch user from localStorage
-  const [token, setToken] = useState(() => localStorage.getItem('token')); // Fetch token from localStorage
+  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('user'))); 
+  const [token, setToken] = useState(() => localStorage.getItem('token')); 
 
   useEffect(() => {
-    // Fetch tasks if user and token are available
+    
     if (user && token) {
       axios
-        .get(`http://localhost:9000/api/getAllTasks/${user.id}`, {
+        .get(`http://localhost:9000/api/tasks/getAllTasks/${user.id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -33,7 +33,7 @@ const HomePage = () => {
       
       <Navbar />
 
-      {/* Welcome Message */}
+      
       {user ? (
         <h1>Welcome, {user.username}</h1>
       ) : (
@@ -44,7 +44,7 @@ const HomePage = () => {
         <button className="add-task-btn">Add Task</button>
       </Link>
 
-      {/* Task List or Message if no tasks */}
+      
       {tasks.length > 0 ? (
         <TaskList tasks={tasks} /> 
       ) : (
@@ -55,3 +55,7 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
+
+
+

@@ -1,33 +1,19 @@
 
 .task-list-container {
-  width: 80%;
-  margin: 50px auto;
+  max-width: 800px;
+  margin: 0 auto;
   padding: 20px;
   background-color: #f9f9f9;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
-  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
+  text-align: center;
   color: #333;
   margin-bottom: 20px;
-}
-
-.add-task-btn {
-  width:250px;
-  background-color: #28a745;
-  color: white;
-  padding: 10px 20px;
-  margin-bottom: 20px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.add-task-btn:hover {
-  background-color: #218838;
+  font-size: 28px;
+  font-weight: bold;
 }
 
 .task-list {
@@ -39,29 +25,41 @@ h1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #fff;
   padding: 15px;
-  margin: 10px 0;
+  margin-bottom: 10px;
+  background-color: #fff;
   border: 1px solid #ddd;
-  border-radius: 5px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  
 }
 
 .task-item.completed {
-  background-color: #e6ffe6;
+  background-color: #e0ffe0; 
   text-decoration: line-through;
 }
 
+.task-item:hover {
+  background-color: #f0f8ff;
+}
+
 .task-details {
+  gap: 10px;
   display: flex;
   align-items: center;
+  justify-content: center;
+}
+
+.task-details input[type="checkbox"] {
+  margin-right: 10px;
+  cursor: pointer;
 }
 
 .task-title {
-  text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
   color: #007bff;
-  font-weight: bold;
-  margin-left: 10px;
-  flex: 1;
+  text-decoration: none;
 }
 
 .task-title:hover {
@@ -70,38 +68,34 @@ h1 {
 
 .task-due-date {
   font-size: 14px;
-  color: #888;
-  margin-right: 20px;
+  margin-left: 10px;
+  color: #666;
 }
 
 .task-actions {
   display: flex;
   align-items: center;
-  gap:10px;
+  gap: 5px;
 }
 
 .edit-btn,
 .delete-btn {
+  background-color: #007bff;
+  border: none;
+  color: #fff;
   padding: 8px 12px;
   margin-left: 10px;
-  border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 14px;
-}
-
-.edit-btn {
-  background-color: #ffc107;
-  color: #fff;
+  transition: background-color 0.3s ease;
 }
 
 .edit-btn:hover {
-  background-color: #e0a800;
+  background-color: #0056b3;
 }
 
 .delete-btn {
   background-color: #dc3545;
-  color: white;
 }
 
 .delete-btn:hover {
